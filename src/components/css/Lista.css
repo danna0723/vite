@@ -1,0 +1,717 @@
+
+:root {
+    --main-color: #1ac5db;
+    --main-color-hover: #09c29a;
+    --second-color: #EDEAE3;
+    --text-color: #1B1B1B;
+    --bg-color: #FFFFFF;
+    --bg-color-alt: #F1F1F1;
+
+    --box-shadow: 2px 2px 10px 4px rgb(14 55 54 / 15%);
+
+    --glow-sens: 30;
+    --card-bg: linear-gradient(8deg, #1a1a1a 75%, color-mix(in hsl, #1a1a1a, white 2.5%) 75.5%);;
+    --blend: soft-light;
+    --glow-blend: plus-lighter;
+    --glow-color: 40deg 80% 80%;
+    --dark: #1a1a1a;
+    --h: 260;
+
+    --primary: #ec5fa1;
+    --secondary: #00e5ff;
+    --accent: #f860b4;
+    --background: #050510;
+    --text-primary: #ffffff;
+    --text-secondary: #b8b8ff;
+}
+
+.light .box-card {
+    --card-bg: linear-gradient(8deg,color-mix(in hsl, hsl(260, 25%, 95%), var(--dark) 2.5%) 75%, hsl(260, 25%, 95%) 75.5%);
+    --blend: darken;
+    --glow-blend: luminosity;
+    --glow-color: 280deg 90% 95%;
+    --fg: black; 
+    color: var(--fg); 
+}
+
+body {
+    color: var(--text-color);
+    background: hsl(var(--h, 260), 18%, 12%);
+    min-height: 100vh;
+    scroll-behavior: smooth;
+}
+
+body.light {
+    background-image: 
+        linear-gradient(180deg, hsl(var(--h), 8%, 58%), hsl(var(--h), 15%, 42%));
+}
+
+body, html {
+    height: 100svh;
+    overflow: auto;
+}
+
+main {
+    justify-items: center;
+    align-content: center;
+    min-height: 100%;
+}
+
+/* ============================================= */
+/* ESTILOS DEL HEADER Y TÍTULO PRINCIPAL       */
+
+.title {
+	font-size: 2.5rem;
+	margin-bottom: 0.5rem;
+	background: linear-gradient(90deg, var(--primary), var(--secondary));
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+	text-shadow: 0 0 15px rgba(157, 0, 255, 0.5);
+	animation: pulse 3s infinite alternate;
+}
+
+/* Estilos para el título de la sección */
+.products .heading {
+    margin-bottom: 2rem;
+    padding: 20px 0;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.products .heading h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    letter-spacing: 2px;
+    text-shadow: 0 0 30px rgba(236, 95, 161, 0.3);
+}
+
+/* BACKGROUND CÓSMICO                           */
+
+.cosmos-background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+	overflow: hidden;
+}
+
+.stars-container {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-image: radial-gradient(1px 1px at 25% 25%, white, hsl(var(--h, 260), 18%, 12%)),
+		radial-gradient(1px 1px at 50% 50%, white, rgba(0, 0, 0, 0)),
+		radial-gradient(2px 2px at 75% 75%, white, rgba(0, 0, 0, 0)),
+		radial-gradient(2px 2px at 100% 100%, white, rgba(0, 0, 0, 0));
+	background-size: 200px 200px, 300px 300px, 400px 400px, 600px 600px;
+	background-repeat: repeat;
+	animation: twinkle 10s linear infinite;
+}
+
+@keyframes twinkle {
+	0% {
+		background-position: 0 0, 0 0, 0 0, 0 0;
+	}
+	100% {
+		background-position: 200px 200px, 300px 300px, 400px 400px, 600px 600px;
+	}
+}
+
+/* ============================================= */
+/* LAYOUT PRINCIPAL Y CONTENEDORES             */
+/* ============================================= */
+
+.user_list {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    /* min-height: 100vh;  */
+    width: 100%;
+}
+
+
+.products {
+    flex: 1;
+    /* margin-right: 340px; */
+    max-width: 1400px;
+    padding-right: 20px;
+    padding-bottom: 2rem;
+    scroll-behavior: smooth;
+    position: relative;
+    width: 100%;
+}
+
+.products-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 4rem;
+    max-width: 100%;
+    padding: 0 20px 2rem 20px;
+    position: relative;
+    width: 100%;
+}
+
+/* ============================================= */
+/* ESTILOS DE LAS TARJETAS DE PRODUCTOS        */
+/* ============================================= */
+
+.box-card {
+    --pads: 40px;
+    --color-sens: calc(var(--glow-sens) + 20);
+
+    position: relative;
+    width: 280px;
+    padding: 10px;
+    border-radius: 0.5rem;
+    isolation: isolate;
+    border: 1px solid rgb(255 255 255 / 25%);
+    background: var(--card-bg);
+    background-repeat: no-repeat;
+    box-shadow: 
+        rgba(0, 0, 0, 0.1) 0px 1px 2px, 
+        rgba(0, 0, 0, 0.1) 0px 2px 4px, 
+        rgba(0, 0, 0, 0.1) 0px 4px 8px, 
+        rgba(0, 0, 0, 0.1) 0px 8px 16px, 
+        rgba(0, 0, 0, 0.1) 0px 16px 32px, 
+        rgba(0, 0, 0, 0.1) 0px 32px 64px;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Efectos glow de las tarjetas */
+.box-card::before,
+.box-card::after,
+.box-card > .glow {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    transition: opacity 0.25s ease-out;
+    z-index: -1;
+}
+
+.box-card:not(:hover):not(.animating)::before,
+.box-card:not(:hover):not(.animating)::after,
+.box-card:not(:hover):not(.animating) > .glow {
+    opacity: 0;
+    transition: opacity 0.75s ease-in-out;
+}
+
+.box-card::before {
+    border: 1px solid transparent;
+    background:
+        linear-gradient(var(--card-bg) 0 100%) padding-box,
+        linear-gradient(rgb(255 255 255 / 0%) 0% 100%) border-box,
+        radial-gradient(at 80% 55%, hsla(268,100%,76%,1) 0px, transparent 50%) border-box,
+        radial-gradient(at 69% 34%, hsla(349,100%,74%,1) 0px, transparent 50%) border-box,
+        radial-gradient(at 8% 6%, hsla(136,100%,78%,1) 0px, transparent 50%) border-box,
+        radial-gradient(at 41% 38%, hsla(192,100%,64%,1) 0px, transparent 50%) border-box,
+        radial-gradient(at 86% 85%, hsla(186,100%,74%,1) 0px, transparent 50%) border-box,
+        radial-gradient(at 82% 18%, hsla(52,100%,65%,1) 0px, transparent 50%) border-box,
+        radial-gradient(at 51% 4%, hsla(12,100%,72%,1) 0px, transparent 50%) border-box,
+        linear-gradient(#c299ff 0 100%) border-box;
+    opacity: calc((var(--pointer-d) - var(--color-sens)) / (100 - var(--color-sens)));
+    mask-image: conic-gradient(from var(--pointer-°) at center, black 25%, transparent 40%, transparent 60%, black 75%);
+}
+
+.box-card::after {
+    border: 1px solid transparent;
+    background:
+        radial-gradient(at 80% 55%, hsla(268,100%,76%,1) 0px, transparent 50%) padding-box,
+        radial-gradient(at 69% 34%, hsla(349,100%,74%,1) 0px, transparent 50%) padding-box,
+        radial-gradient(at 8% 6%, hsla(136,100%,78%,1) 0px, transparent 50%) padding-box,
+        radial-gradient(at 41% 38%, hsla(192,100%,64%,1) 0px, transparent 50%) padding-box,
+        radial-gradient(at 86% 85%, hsla(186,100%,74%,1) 0px, transparent 50%) padding-box,
+        radial-gradient(at 82% 18%, hsla(52,100%,65%,1) 0px, transparent 50%) padding-box,
+        radial-gradient(at 51% 4%, hsla(12,100%,72%,1) 0px, transparent 50%) padding-box,
+        linear-gradient(#c299ff 0 100%) padding-box;
+    mask-image:
+        linear-gradient(to bottom, black, black),
+        radial-gradient(ellipse at 50% 50%, black 40%, transparent 65%),
+        radial-gradient(ellipse at 66% 66%, black 5%, transparent 40%),
+        radial-gradient(ellipse at 33% 33%, black 5%, transparent 40%),
+        radial-gradient(ellipse at 66% 33%, black 5%, transparent 40%),
+        radial-gradient(ellipse at 33% 66%, black 5%, transparent 40%),
+        conic-gradient(from var(--pointer-°) at center, transparent 5%, black 15%, black 85%, transparent 95%);
+    mask-composite: subtract, add, add, add, add, add;
+    opacity: calc((var(--pointer-d) - var(--color-sens)) / (100 - var(--color-sens)));
+    mix-blend-mode: var(--blend);
+}
+
+.box-card > .glow {
+    --outset: var(--pads);
+    position: absolute;
+    inset: calc(var(--outset) * -1);
+    pointer-events: none;
+    z-index: 1;
+    mask-image: conic-gradient(from var(--pointer-°) at center, black 2.5%, transparent 10%, transparent 90%, black 97.5%);
+    opacity: calc((var(--pointer-d) - var(--glow-sens)) / (100 - var(--glow-sens)));
+    mix-blend-mode: var(--glow-blend);
+    border-radius: inherit;
+}
+
+.box-card > .glow::before {
+    content: "";
+    position: absolute;
+    inset: var(--outset);
+    border-radius: inherit;
+    box-shadow:
+        inset 0 0 0 1px hsl(var(--glow-color) / 100%),
+        inset 0 0 2px 2px hsl(var(--glow-color) / 90%),
+        inset 0 0 5px 1px hsl(var(--glow-color) / 75%),
+        inset 0 0 8px 1px hsl(var(--glow-color) / 66%),
+        inset 0 0 15px 0 hsl(var(--glow-color) / 50%),
+        inset 0 0 25px 2px hsl(var(--glow-color) / 30%),
+        inset 0 0 50px 2px hsl(var(--glow-color) / 10%),
+
+        0 0 2px 2px hsl(var(--glow-color) / 90%),
+        0 0 5px 1px hsl(var(--glow-color) / 75%),
+        0 0 8px 1px hsl(var(--glow-color) / 66%),
+        0 0 15px 0 hsl(var(--glow-color) / 50%),
+        0 0 25px 2px hsl(var(--glow-color) / 30%),
+        0 0 50px 2px hsl(var(--glow-color) / 10%);
+}
+
+/* Hover effects de las tarjetas */
+.box-card:hover {
+    transform: translateY(-10px);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Contenido de las tarjetas */
+.products-container img {
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    object-position: center;
+    padding: 20px;
+    border-radius: 0.5rem;
+    display: block;
+    
+}
+
+.box-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin: 0.5rem 0;
+    text-align: center;
+    color: white;
+}
+
+.box-card .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.box-card .content span {
+    padding: 0 1rem;
+    color: var(--bg-color);
+    background: var(--main-color);
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.box-card .content a {
+    padding: 0 1rem;
+    color: white;
+    border: 2px solid var(--main-color);
+    border-radius: 4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.box-card .content a:hover {
+    background: var(--main-color);
+    color: var(--bg-color);
+    transition: 0.4s all linear;
+}
+
+/* Estilos para tarjetas sin imagen */
+.box-card.sin-imagen {
+    min-height: 120px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.box-card.sin-imagen h3 {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.box-card.sin-imagen .content {
+    margin-top: 15px;
+}
+
+/* Efecto tachado */
+.tachado {
+    text-decoration: line-through;
+    opacity: 0.6;
+    color: #7f8c8d !important;
+}
+
+.tachado .box-card {
+    filter: grayscale(50%);
+    opacity: 0.7;
+}
+
+/* ============================================= */
+/* BOTONES DE ACCIÓN DE LAS TARJETAS           */
+/* ============================================= */
+
+.acciones-producto {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 10;
+}
+
+.box-card:hover .acciones-producto {
+    opacity: 1;
+}
+
+.acciones-producto button {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    width: 40px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.btn-eliminar {
+    background: rgba(170, 0, 0, 0.9);
+    color: rgb(145, 0, 0);
+}
+
+.btn-eliminar:hover {
+    background: #9b0f00;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.5);
+}
+
+.btn-editar {
+    background: rgba(52, 152, 219, 0.9);
+    color: rgb(0, 82, 158);
+}
+
+.btn-editar:hover {
+    background: #3498db;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.5);
+}
+
+.btn-tachar {
+    background: rgba(209, 68, 110, 0.9);
+    color: rgb(156, 0, 47);
+}
+
+.btn-tachar:hover {
+    background: rgba(209, 68, 110, 0.9);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.5);
+}
+
+/* ============================================= */
+/*  AÑADIR PRODUCTOS            */
+/* ============================================= */
+
+.user_list .añadir {
+    flex: 0 0 320px;
+    position: fixed;
+    right: 0;
+    top: 80px;
+    height: calc(100vh - 80px);
+    z-index: 2;
+    /* background: var(--card-bg); */
+    /* box-shadow: -2px 0 16px rgba(0,0,0,0.12); */
+    /* border-left: 1px solid rgba(255,255,255,0.08); */
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+}
+
+.añadir h1 {
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.form-container {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--box-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 1rem;
+    width: 550px;
+}
+
+.producto-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    padding: 0.75rem;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(236, 95, 161, 0.1);
+}
+
+.form-group input::placeholder {
+    color: var(--text-secondary);
+}
+
+/* Botones del formulario */
+.form-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.submit-btn {
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, var(--primary), var(--accent));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(236, 95, 161, 0.3);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.cancel-btn {
+    background: linear-gradient(135deg, #e73c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.cancel-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+/* ============================================= */
+/* ANIMACIONES Y EFECTOS ESPECIALES            */
+/* ============================================= */
+
+/* Animación del vuelo al carrito */
+.fly {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    z-index: 299;
+    pointer-events: none;
+    animation: flyToCart 1s ease forwards;
+}
+
+@keyframes flyToCart {
+    0% {
+        opacity: 1;
+        transform: scale(1) translate(0, 0);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.2) translate(calc(-1 * var(--tx)), calc(-1 * var(--ty)));
+    }
+}
+
+/* Animación de fade del contenido */
+@keyframes fadeContent {
+    to {
+        opacity: 1;
+    }
+}
+
+/*responsive*/
+
+@media screen and (max-width: 700px) {
+    .user_list {
+    /* display: flex; */
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: flex-start;
+    /* min-height: 100vh; */
+    width: 100%;
+    }
+
+    .user_list .añadir {
+    flex: 0 0 320px;
+    position: absolute;
+    right: 0;
+    top: 80px;
+    height: calc(100vh - 80px);
+    z-index: 2;
+    /* background: var(--card-bg); */
+    /* box-shadow: -2px 0 16px rgba(0, 0, 0, 0.12); */
+    /* border-left: 1px solid rgba(255, 255, 255, 0.08); */
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+    }
+
+    .form-container {
+    /* background: var(--card-bg); */
+    /* border-radius: 12px; */
+    /* padding: 2rem; */
+    /* box-shadow: var(--box-shadow); */
+    /* border: 1px solid rgba(255, 255, 255, 0.1); */
+    /* margin-top: 1rem; */
+        width: 450px;
+    }
+
+    .products {
+        /* flex: 1;
+        margin-right: 340px;
+        max-width: 1400px;
+        padding-right: 20px;
+        padding-bottom: 2rem;
+        scroll-behavior: smooth;
+        position: relative;
+        width: 100%; */
+        margin-top: 480px;
+}
+
+.products-container {
+    padding: 0 20px 2rem 40px;
+
+}
+}
+
+@media(max-width: 1058px) {
+    header { padding: 16px 60px; }
+    section { padding: 50px 60px; }
+    .home-text h1 { font-size: 2.4rem; }
+}
+
+@media(max-width: 991px) {
+    header { padding: 16px 4%; }
+    section { padding: 50px 4%; }
+    .home-text h1 { font-size: 2rem; margin-top: 50px; }
+}
+
+@media(max-width: 768px) {
+    header { padding: 12px 4%; }
+    #menu-icon { display: initial; }
+    .navbar { 
+        position: absolute; 
+        top: -570px; 
+        left: 0; 
+        right: 0; 
+        display: flex; 
+        flex-direction: column; 
+        background: var(--second-color); 
+        row-gap: 1.4rem; 
+        padding: 20px; 
+        transition: .4s; 
+        text-align: center; 
+    }
+        .navbar a { color: var(--text-color); }
+            .navbar a:hover { color: var(--bg-color); }
+        .navbar.active { top: 100%; }
+    .about { align-items: center; } 
+}
+
+@media(max-width: 568px) {
+    .footer { place-items: center; text-align: center; }
+    .social { justify-content: center; }
+    .contact { align-items: center; justify-content: center; }
+}
+
+@media(max-width: 360px) {
+    header { padding: 11px 4%; }
+    .logo img { width: 45px; }
+    .home-text { padding-top: 15px; }
+        .home-text h1 { font-size: 1.4rem; }
+        .home-text p { font-size: .8rem; font-weight: 300; }
+
+    .about-img { order: 2; }
+    .about-text { text-align: center; }
+        .about-text h2 { font-size: 1.2rem; }
+    .heading h2 { font-size: 1.2rem; }
+}
