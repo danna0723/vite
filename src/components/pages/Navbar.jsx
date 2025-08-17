@@ -3,7 +3,7 @@ import "../css/Navbar.css";
 
 
 
-export default function Navbar({user, onLogout}){
+export default function Navbar({ user, onLogout }) {
     const [cartCount, setCartCount] = useState(0);
 
     return (
@@ -26,20 +26,37 @@ export default function Navbar({user, onLogout}){
                     <output id="cart-count" aria-label={cartCount}>{cartCount}</output>
                 </div>
                 <i className="bx bx-search" id="search-icon"></i>
-                                <div className="profile-pic">
-                    {user?.usuario ?(
+                <div className="profile-pic">
+                    {user?.usuario ? (
                         <>
-                            <span style={{marin: 8}}> {user.usuario}</span>   
-
+                            <span style={{ 
+                                marginRight: 12, 
+                                color: '#ffffffff', 
+                                fontSize: '20px',
+                                letterSpacing: '1px',
+                            }}>Holi, {user.usuario}</span>
+                            <img  src="https://i.pinimg.com/736x/c7/a4/dc/c7a4dcd0de4b07295caa8386f98f63db.jpg" alt="Profile Picture" className="profile-image"/>
+                            <button 
+                                onClick={onLogout}
+                                style={{
+                                    background: 'linear-gradient(90deg, #65a3ffff, #f06292)',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '16px',
+                                    padding: '6px 16px',
+                                    fontWeight: 'bold',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                                    transition: 'background 0.3s',
+                                    marginLeft: '4px',
+                                }}
+                                onMouseOver={e => e.currentTarget.style.background = 'linear-gradient(90deg, #f06292, #65a3ffff)'}
+                                onMouseOut={e => e.currentTarget.style.background = 'linear-gradient(90deg, #65a3ffff, #f06292)'}
+                            >
+                                Cerrar sesión
+                            </button>
                         </>
-
-                    ): null
-                    }
-                    <img 
-                        src="https://i.pinimg.com/736x/c7/a4/dc/c7a4dcd0de4b07295caa8386f98f63db.jpg" 
-                        alt="Profile Picture" 
-                        className="profile-image"
-                    />
+                    ) : null}
                 </div>
 
             </div>

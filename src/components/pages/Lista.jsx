@@ -48,7 +48,7 @@ export default function ListaDeGustos({titulo,descripcion}){
                 tachado: false // Nueva propiedad para el estado tachado
             };
             setProductos([...productos, producto]);
-            setNuevoProducto({ nombre: '', precio: '', imagen: '' }); // Limpiar formulario
+            // setNuevoProducto({ nombre: '', precio: '', imagen: '' }); // Limpiar formulario
         }
     };
 
