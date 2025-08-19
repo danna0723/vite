@@ -21,10 +21,10 @@ export default function Navbar({ user, onLogout }) {
             </ul>
 
             <div className="header-icon">
-                <div className="cart-container">
+                {/* <div className="cart-container">
                     <i className="bx bx-cart-alt"></i>
                     <output id="cart-count" aria-label={cartCount}>{cartCount}</output>
-                </div>
+                </div> */}
                 <i className="bx bx-search" id="search-icon"></i>
                 <div className="profile-pic">
                     {user?.usuario ? (

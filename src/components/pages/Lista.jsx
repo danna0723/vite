@@ -1,31 +1,53 @@
 import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 import "../css/Lista.css";
 
 export default function ListaDeGustos({titulo,descripcion}){
 
-    const [productos, setProductos] = useState([
-        // {
-        //     id: 1,
-        //     nombre: 'Yandere Simulator',
-        //     precio: 10,
-        //     imagen: 'https://th.bing.com/th/id/R.49fe475a5f656c07895f8a1e19098d29?rik=US%2fjypo4cZpuzA&pid=ImgRaw&r=0',
-        //     tachado: false
-        // },
-        // {
-        //     id: 2,
-        //     nombre: 'The Sims 4',
-        //     precio: 20,
-        //     imagen: 'https://th.bing.com/th/id/R.72a2d261aa1485a7a30855e83d53b839?rik=41lbsqb75o018A&pid=ImgRaw&r=0',
-        //     tachado: false
-        // },
-        // {
-        //     id: 3,
-        //     nombre: 'Minecraft',
-        //     precio: 30,
-        //     imagen: 'https://image.api.playstation.com/vulcan/ap/rnd/202407/0401/670c294ded3baf4fa11068db2ec6758c63f7daeb266a35a1.png',
-        //     tachado: false
-        // }
-    ]);
+    // Cargar productos desde localStorage
+    const [productos, setProductos] = useState(() => {
+        const guardados = localStorage.getItem('productos');
+        return guardados ? JSON.parse(guardados) : [];
+    });
+
+
+    // Carrito
+    const [cartCount, setCartCount] = useState(0);
+    const cartIconRef = useRef(null);
+    const cartOutputRef = useRef(null);
+    const imgRefs = useRef({});
+
+    // Animación de contador
+    const animateCartCount = () => {
+        const output = cartOutputRef.current;
+        if (output) {
+            output.classList.remove('pop');
+            void output.offsetWidth;
+            output.classList.add('pop');
+        }
+    };
+
+    // Animación de imagen volando al carrito
+    const flyToCart = (id) => {
+        const img = imgRefs.current[id];
+        const cart = cartIconRef.current;
+        if (!img || !cart) return;
+        const clone = img.cloneNode(true);
+        const imgRect = img.getBoundingClientRect();
+        const cartRect = cart.getBoundingClientRect();
+        clone.classList.add('fly');
+        clone.style.top = imgRect.top + 'px';
+        clone.style.left = imgRect.left + 'px';
+        clone.style.position = 'fixed';
+        const tx = imgRect.left - cartRect.left;
+        const ty = imgRect.top - cartRect.top;
+        clone.style.setProperty('--tx', tx + 'px');
+        clone.style.setProperty('--ty', ty + 'px');
+        document.body.appendChild(clone);
+        clone.addEventListener('animationend', () => {
+            clone.remove();
+        });
+    };
 
     const [nuevoProducto, setNuevoProducto] = useState({
         nombre: '',
@@ -33,218 +55,162 @@ export default function ListaDeGustos({titulo,descripcion}){
         imagen: ''
     });
 
-    // Estado para el producto en edición
-    const [editandoProducto, setEditandoProducto] = useState(null);
-
-    // Función para añadir un nuevo producto
     const añadirProducto = (e) => {
         e.preventDefault();
         if (nuevoProducto.nombre && nuevoProducto.precio) {
             const producto = {
-                id: Date.now(), // ID único basado en timestamp
+                id: Date.now(),
                 nombre: nuevoProducto.nombre,
                 precio: nuevoProducto.precio,
-                imagen: nuevoProducto.imagen || '', // Imagen opcional
-                tachado: false // Nueva propiedad para el estado tachado
+                imagen: nuevoProducto.imagen || '',
             };
-            setProductos([...productos, producto]);
-            // setNuevoProducto({ nombre: '', precio: '', imagen: '' }); // Limpiar formulario
+            const nuevos = [...productos, producto];
+            setProductos(nuevos);
+            localStorage.setItem('productos', JSON.stringify(nuevos));
+            // setNuevoProducto({ nombre: '', precio: '', imagen: '' });
         }
     };
 
-    // Función para manejar cambios en el formulario
-    const manejarCambio = (e) => {
-        setNuevoProducto({
-            ...nuevoProducto,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    // Función para eliminar un producto
     const eliminarProducto = (id) => {
         if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-            setProductos(productos.filter(producto => producto.id !== id));
+            const nuevos = productos.filter(producto => producto.id !== id);
+            setProductos(nuevos);
+            localStorage.setItem('productos', JSON.stringify(nuevos));
         }
     };
 
-    // Función para tachar/destachar un producto
-    const tacharProducto = (id) => {
-        setProductos(productos.map(producto => 
-            producto.id === id 
-                ? { ...producto, tachado: !producto.tachado }
-                : producto
-        ));
-    };
+    
+    useEffect(() => {
+        localStorage.setItem('productos', JSON.stringify(productos));
+    }, [productos]);
 
-    // Función para iniciar la edición de un producto
-    const iniciarEdicion = (producto) => {
-        setEditandoProducto(producto);
-        setNuevoProducto({
-            nombre: producto.nombre,
-            precio: producto.precio,
-            imagen: producto.imagen
-        });
-    };
 
-    // Función para guardar los cambios de edición
-    const guardarEdicion = (e) => {
-        e.preventDefault();
-        if (nuevoProducto.nombre && nuevoProducto.precio) {
-            setProductos(productos.map(producto => 
-                producto.id === editandoProducto.id
-                    ? { ...producto, nombre: nuevoProducto.nombre, precio: nuevoProducto.precio, imagen: nuevoProducto.imagen || '' }
-                    : producto
-            ));
-            setEditandoProducto(null);
-            setNuevoProducto({ nombre: '', precio: '', imagen: '' });
-        }
-    };
-
-    // Función para cancelar la edición
-    const cancelarEdicion = () => {
-        setEditandoProducto(null);
-        setNuevoProducto({ nombre: '', precio: '', imagen: '' });
-    };
+    // tarjetas
+    const round = (value, precision = 3) => parseFloat(value.toFixed(precision));
+    const clamp = (value, min = 0, max = 100) => Math.min(Math.max(value, min), max);
 
     useEffect(() => {
-        // Esperar a que el DOM esté listo y luego inicializar los efectos del mouse
-        const initMouseEffects = () => {
-            // Funciones de utilidad
-            const centerOfElement = ($el) => {
-                const { width, height } = $el.getBoundingClientRect();
-                return [width / 2, height / 2];
-            };
-
-            const pointerPositionRelativeToElement = ($el, e) => {
-                const pos = [e.clientX, e.clientY];
-                const { left, top, width, height } = $el.getBoundingClientRect();
-                const x = pos[0] - left;
-                const y = pos[1] - top;
-                const px = clamp((100 / width) * x);
-                const py = clamp((100 / height) * y);
-                return { pixels: [x, y], percent: [px, py] };
-            };
-
-            const angleFromPointerEvent = ($el, dx, dy) => {
-                let angleDegrees = 0;
-                if (dx !== 0 || dy !== 0) {
-                    const angleRadians = Math.atan2(dy, dx);
-                    angleDegrees = angleRadians * (180 / Math.PI) + 90;
-                    if (angleDegrees < 0) angleDegrees += 360;
-                }
-                return angleDegrees;
-            };
-
-            const distanceFromCenter = ($el, x, y) => {
-                const [cx, cy] = centerOfElement($el);
-                return [x - cx, y - cy];
-            };
-
-            const closenessToEdge = ($el, x, y) => {
-                const [cx, cy] = centerOfElement($el);
-                const [dx, dy] = distanceFromCenter($el, x, y);
-                let kx = Infinity;
-                let ky = Infinity;
-                if (dx !== 0) kx = cx / Math.abs(dx);
-                if (dy !== 0) ky = cy / Math.abs(dy);
-                return clamp(1 / Math.min(kx, ky), 0, 1);
-            };
-
-            const round = (value, precision = 3) => parseFloat(value.toFixed(precision));
-            const clamp = (value, min = 0, max = 100) => Math.min(Math.max(value, min), max);
-
-            // Aplicar efectos a las tarjetas
-            const cards = document.querySelectorAll('.box-card');
-            console.log('Found cards:', cards.length); // Debug
-
-            cards.forEach($card => {
-                const cardUpdate = (e) => {
-                    console.log('Mouse move detected on card'); // Debug
-                    const position = pointerPositionRelativeToElement($card, e);
-                    const [px, py] = position.pixels;
-                    const [perx, pery] = position.percent;
-                    const [dx, dy] = distanceFromCenter($card, px, py);
-                    const edge = closenessToEdge($card, px, py);
-                    const angle = angleFromPointerEvent($card, dx, dy);
-
-                    console.log('Setting variables:', {
-                        x: perx,
-                        y: pery,
-                        angle: angle,
-                        edge: edge
-                    }); // Debug
-
-                    $card.style.setProperty('--pointer-x', `${round(perx)}%`);
-                    $card.style.setProperty('--pointer-y', `${round(pery)}%`);
-                    $card.style.setProperty('--pointer-°', `${round(angle)}deg`);
-                    $card.style.setProperty('--pointer-d', `${round(edge * 100)}`);
-
-                    $card.classList.remove('animating');
-                };
-
-                $card.addEventListener('pointermove', cardUpdate);
-
-                $card.addEventListener('pointerleave', () => {
-                    $card.style.setProperty('--pointer-d', '0');
-                });
-            });
+        // Funciones de utilidad
+        const centerOfElement = ($el) => {
+            const { width, height } = $el.getBoundingClientRect();
+            return [width / 2, height / 2];
         };
 
-        // Ejecutar después de un pequeño delay para asegurar que el DOM esté listo
-        setTimeout(initMouseEffects, 100);
+        const pointerPositionRelativeToElement = ($el, e) => {
+            const pos = [e.clientX, e.clientY];
+            const { left, top, width, height } = $el.getBoundingClientRect();
+            const x = pos[0] - left;
+            const y = pos[1] - top;
+            const px = clamp((100 / width) * x);
+            const py = clamp((100 / height) * y);
+            return { pixels: [x, y], percent: [px, py] };
+        };
+
+        const angleFromPointerEvent = ($el, dx, dy) => {
+            let angleDegrees = 0;
+            if (dx !== 0 || dy !== 0) {
+                const angleRadians = Math.atan2(dy, dx);
+                angleDegrees = angleRadians * (180 / Math.PI) + 90;
+                if (angleDegrees < 0) angleDegrees += 360;
+            }
+            return angleDegrees;
+        };
+
+        const distanceFromCenter = ($el, x, y) => {
+            const [cx, cy] = centerOfElement($el);
+            return [x - cx, y - cy];
+        };
+
+        const closenessToEdge = ($el, x, y) => {
+            const [cx, cy] = centerOfElement($el);
+            const [dx, dy] = distanceFromCenter($el, x, y);
+            let kx = Infinity;
+            let ky = Infinity;
+            if (dx !== 0) kx = cx / Math.abs(dx);
+            if (dy !== 0) ky = cy / Math.abs(dy);
+            return clamp(1 / Math.min(kx, ky), 0, 1);
+        };
+
+        // Aplicar efectos a las tarjetas
+        const cards = document.querySelectorAll('.box-card');
+        const handlers = [];
+        cards.forEach($card => {
+            const cardUpdate = (e) => {
+                const position = pointerPositionRelativeToElement($card, e);
+                const [px, py] = position.pixels;
+                const [perx, pery] = position.percent;
+                const [dx, dy] = distanceFromCenter($card, px, py);
+                const edge = closenessToEdge($card, px, py);
+                const angle = angleFromPointerEvent($card, dx, dy);
+
+                $card.style.setProperty('--pointer-x', `${round(perx)}%`);
+                $card.style.setProperty('--pointer-y', `${round(pery)}%`);
+                $card.style.setProperty('--pointer-°', `${round(angle)}deg`);
+                $card.style.setProperty('--pointer-d', `${round(edge * 100)}`);
+
+                $card.classList.remove('animating');
+            };
+            const leaveHandler = () => {
+                $card.style.setProperty('--pointer-d', '0');
+            };
+            $card.addEventListener('pointermove', cardUpdate);
+            $card.addEventListener('pointerleave', leaveHandler);
+            handlers.push({ $card, cardUpdate, leaveHandler });
+        });
 
         // Cleanup function
         return () => {
-            const cards = document.querySelectorAll('.box-card');
-            cards.forEach(card => {
-                card.removeEventListener('pointermove', () => {});
-                card.removeEventListener('pointerleave', () => {});
+            handlers.forEach(({ $card, cardUpdate, leaveHandler }) => {
+                $card.removeEventListener('pointermove', cardUpdate);
+                $card.removeEventListener('pointerleave', leaveHandler);
             });
         };
-    }, [productos]); // Dependencia de productos para reinicializar efectos
+    }, [productos]); 
 
 return (
     <>
     <div className='user_list'>
         <section className="products" id="products">
             <div className="heading">
+                
                 <h2>videogames</h2>
             </div>
 
+            <div class="cosmos-background">
+                <div class="stars-container"></div>
+            </div>
+
+
             <div className="products-container">
+                
                 {productos.map((producto) => (
                     <div key={producto.id} className={`box-card ${!producto.imagen ? 'sin-imagen' : ''}`}>
                         {producto.imagen && (
-                            <img src={producto.imagen} alt={producto.nombre} />
+                            <img src={producto.imagen} alt={producto.nombre} ref={el => (imgRefs.current[producto.id] = el)} />
                         )}
-                        <h3 className={producto.tachado ? 'tachado' : ''}>{producto.nombre}</h3>
+                        <h3>{producto.nombre}</h3>
                         <div className="content">
                             <span>${producto.precio}</span>
-                            <a href="#" className="add-to-cart">Add to Cart</a>
+                            <button
+                                className="add-to-cart"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    setCartCount(c => c + 1);
+                                    animateCartCount();
+                                    flyToCart(producto.id);
+                                }}
+                            >
+                                Add to Cart
+                            </button>
                         </div>
-                        
-                        {/* Botones de acción */}
+                        {/* <p style={{ color: 'white', fontSize: '0.9em', margin: '4px 0' }}>Creado por: {user?.usuario || 'Invitado'}</p> */}
                         <div className="acciones-producto">
-                            <button 
-                                className="btn-tachar"
-                                onClick={() => tacharProducto(producto.id)}
-                                title={producto.tachado ? "Destachar" : "Tachar"}
-                            >
-                                {producto.tachado ? "↩️" : "X"}
-                            </button>
-                            <button 
-                                className="btn-editar"
-                                onClick={() => iniciarEdicion(producto)}
-                                title="Editar"
-                            >
-                                ✏️
-                            </button>
                             <button 
                                 className="btn-eliminar"
                                 onClick={() => eliminarProducto(producto.id)}
                                 title="Eliminar"
                             >
-                                borrar
+                                X
                             </button>
                         </div>
                         
@@ -252,60 +218,72 @@ return (
                     </div>
                 ))}
             </div>
+
+
+
+        <div className="cart-icon" id="cart" ref={cartIconRef} style={{position: 'fixed', top: 20, right: 20, zIndex: 300, display: 'flex', alignItems: 'center', gap: '4px'}}>
+            <i className="bx bx-cart-alt" style={{fontSize: '2rem', color: 'white'}}></i>
+            <output
+                id="cart-count"
+                aria-label={`Cart has ${cartCount} items`}
+                ref={cartOutputRef}
+                style={{background: 'red', color: 'white', borderRadius: '50%', width: 24, height: 24, display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 'bold'}}
+            >
+                {cartCount}
+            </output>
+        </div>
         </section>
+
+
         <section className='añadir' id='añadir'>
-            <h1>{editandoProducto ? 'Editar Producto' : 'Añadir Nuevo'}</h1>
+            <h1>Añadir Nuevo</h1>
             <div className="form-container">
-                <form onSubmit={editandoProducto ? guardarEdicion : añadirProducto} className="producto-form">
-                    <div className="form-group">
-                        <label htmlFor="nombre">Nombre del juego:</label>
-                        <input
-                            type="text"
-                            id="nombre"
-                            name="nombre"
-                            value={nuevoProducto.nombre}
-                            onChange={manejarCambio}
-                            placeholder=""
-                            required
-                        />
-                    </div>
-                    
-                    <div className="form-group">
-                        <label htmlFor="precio">Precio ($):</label>
-                        <input
-                            type="number"
-                            id="precio"
-                            name="precio"
-                            value={nuevoProducto.precio}
-                            onChange={manejarCambio}
-                            placeholder=""
-                            min="0"
-                            step="0.01"
-                            required
-                        />
-                    </div>
-                    
-                    <div className="form-group">
-                        <label htmlFor="imagen">URL de la imagen (opcional):</label>
-                        <input
-                            type="url"
-                            id="imagen"
-                            name="imagen"
-                            value={nuevoProducto.imagen}
-                            onChange={manejarCambio}
-                            placeholder=""
-                        />
-                    </div>
-                    
+                <form onSubmit={añadirProducto} className="producto-form">
+                        <div className="form-group">
+                            <label htmlFor="nombre">Nombre del juego:</label>
+                            <input
+                                type="text"
+                                id="nombre"
+                                name="nombre"
+                                value={nuevoProducto.nombre}
+                                onChange={e => setNuevoProducto({ ...nuevoProducto, nombre: e.target.value })}
+                                placeholder=""
+                                required
+                            />
+                        </div>
+                        
+
+                        <div className="form-group">
+                            <label htmlFor="precio">Precio ($):</label>
+                            <input
+                                type="number"
+                                id="precio"
+                                name="precio"
+                                value={nuevoProducto.precio}
+                                onChange={e => setNuevoProducto({ ...nuevoProducto, precio: e.target.value })}
+                                placeholder=""
+                                min="0"
+                                step="0.01"
+                                required
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="imagen">URL de la imagen (opcional):</label>
+                            <input
+                                type="url"
+                                id="imagen"
+                                name="imagen"
+                                value={nuevoProducto.imagen}
+                                onChange={e => setNuevoProducto({ ...nuevoProducto, imagen: e.target.value })}
+                                placeholder=""
+                            />
+                        </div>
                     <div className="form-buttons">
                         <button type="submit" className="submit-btn">
-                            {editandoProducto ? 'Guardar Cambios' : 'Añadir Producto'}
+                            Guardar
                         </button>
-                        {editandoProducto && (
-                            <button type="button" className="cancel-btn" onClick={cancelarEdicion}>
-                                Cancelar
-                            </button>
-                        )}
+                        
                     </div>
                 </form>
             </div>
