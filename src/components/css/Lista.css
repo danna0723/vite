@@ -1,4 +1,5 @@
 
+/* Modo claro (por defecto) */
 :root {
     --main-color: #1ac5db;
     --main-color-hover: #09c29a;
@@ -6,17 +7,38 @@
     --text-color: #1B1B1B;
     --bg-color: #FFFFFF;
     --bg-color-alt: #F1F1F1;
-
     --box-shadow: 2px 2px 10px 4px rgb(14 55 54 / 15%);
-
     --glow-sens: 30;
-    --card-bg: linear-gradient(8deg, #1a1a1a 75%, color-mix(in hsl, #1a1a1a, white 2.5%) 75.5%);;
+    --card-bg: linear-gradient(8deg, #f5f5fa 75%, color-mix(in hsl, #f5f5fa, #fff 2.5%) 75.5%);
+    --blend: darken;
+    --glow-blend: luminosity;
+    --glow-color: 280deg 90% 95%;
+    --dark: #1a1a1a;
+    --h: 260;
+    --primary: #ec5fa1;
+    --secondary: #00e5ff;
+    --accent: #f860b4;
+    --background: #f5f5fa;
+    --text-primary: #1B1B1B;
+    --text-secondary: #333;
+}
+
+/* Modo oscuro */
+:root[data-theme='dark'] {
+    --main-color: #ff63ac;
+    --main-color-hover: #09c29a;
+    --second-color: #232323;
+    --text-color: #fff;
+    --bg-color: #181824;
+    --bg-color-alt: #232336;
+    --box-shadow: 2px 2px 10px 4px rgb(14 55 54 / 25%);
+    --glow-sens: 30;
+    --card-bg: linear-gradient(8deg, #1a1a1a 75%, color-mix(in hsl, #1a1a1a, white 2.5%) 75.5%);
     --blend: soft-light;
     --glow-blend: plus-lighter;
     --glow-color: 40deg 80% 80%;
     --dark: #1a1a1a;
     --h: 260;
-
     --primary: #ec5fa1;
     --secondary: #00e5ff;
     --accent: #f860b4;
@@ -24,7 +46,6 @@
     --text-primary: #ffffff;
     --text-secondary: #b8b8ff;
 }
-
 .light .box-card {
     --card-bg: linear-gradient(8deg,color-mix(in hsl, hsl(260, 25%, 95%), var(--dark) 2.5%) 75%, hsl(260, 25%, 95%) 75.5%);
     --blend: darken;
@@ -36,14 +57,45 @@
 
 body {
     color: var(--text-color);
-    background: hsl(var(--h, 260), 18%, 12%);
+    background: hsl(0deg 29.16% 74.64%);;
     min-height: 100vh;
     scroll-behavior: smooth;
 }
 
 body.light {
-    background-image: 
-        linear-gradient(180deg, hsl(var(--h), 8%, 58%), hsl(var(--h), 15%, 42%));
+    background-color: #fff;
+    background-image: none;
+}
+
+.cosmos-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+body.light .cosmos-background {
+    background: none !important;
+}
+
+:root[data-theme='dark'] .cosmos-background {
+    background: radial-gradient(ellipse at bottom, hsl(var(--h, 260), 18%, 12%) 0%, #1b0217 100%) !important;
+}
+
+:root[data-theme='dark'] .añadir h1 {
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+:root[data-theme='dark'] .box-card h3 {
+    color: white;
 }
 
 body, html {
@@ -59,7 +111,7 @@ main {
 
 /* HEADER*/
 
-.title {
+/* .title {
 	font-size: 2.5rem;
 	margin-bottom: 0.5rem;
 	background: linear-gradient(90deg, var(--primary), var(--secondary));
@@ -90,19 +142,22 @@ main {
     margin: 0;
     letter-spacing: 2px;
     text-shadow: 0 0 30px rgba(236, 95, 161, 0.3);
-}
+} */
 
 /* BACKGROUND*/
 
-.cosmos-background {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: -1;
-	background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-	overflow: hidden;
+/* .cosmos-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+body.light .cosmos-background {
+    background: none !important;
 }
 
 .stars-container {
@@ -125,7 +180,7 @@ main {
 	100% {
 		background-position: 200px 200px, 300px 300px, 400px 400px, 600px 600px;
 	}
-}
+} */
 
 /* CONTENEDORES */
 
@@ -306,7 +361,7 @@ main {
     text-transform: uppercase;
     margin: 0.5rem 0;
     text-align: center;
-    color: white;
+    color: rgb(87, 0, 36);
 }
 
 .box-card .content {
@@ -460,7 +515,7 @@ main {
     color: var(--text-primary);
     text-align: center;
     margin-bottom: 1rem;
-    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    background: linear-gradient(45deg, #ffd4e9, #4ffdff);;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

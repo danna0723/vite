@@ -9,9 +9,18 @@ export default function Login({ onLogin }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // Obtener lista de usuarios
+        const usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
+
         if (registrando) {
+            // Verificar si el usuario ya existe
+            if (usuarios.some(u => u.usuario === usuario)) {
+                setMensaje("Ese usuario ya existe");
+                return;
+            }
             // Guardar usuario nuevo
-            localStorage.setItem("usuario", JSON.stringify({ usuario, clave }));
+            const nuevo = { usuario, clave };
+            localStorage.setItem("usuarios", JSON.stringify([...usuarios, nuevo]));
             setMensaje("Usuario registrado. Ahora inicia sesión.");
             setRegistrando(false);
             setClave("");
@@ -19,12 +28,13 @@ export default function Login({ onLogin }) {
         }
 
         // Intento de login
-        const datos = JSON.parse(localStorage.getItem("usuario") || "null");
-        if (datos && datos.usuario === usuario && datos.clave === clave) {
+        const datos = usuarios.find(u => u.usuario === usuario && u.clave === clave);
+        if (datos) {
             localStorage.setItem("sesion", "activa");
+            localStorage.setItem("usuario", datos.usuario); // Guarda solo el string
             setMensaje("Bienvenido " + usuario);
             // Avisar al componente padre (App) que el login fue exitoso
-            onLogin?.();
+            onLogin?.(usuario);
         } else {
             setMensaje("Usuario o contraseña incorrectos");
         }

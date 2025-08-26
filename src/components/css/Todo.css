@@ -1,0 +1,127 @@
+/* Estilos para Todo.jsx */
+
+.listaTarea {
+	list-style: none;
+	padding: 0;
+	margin: 1.5rem 0;
+	max-width: 400px;
+	background: var(--bg-color, #fff);
+	border-radius: 10px;
+	box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.itemsMap {
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	padding: 0.7rem 1rem;
+	border-bottom: 1px solid #ececec;
+	font-size: 1rem;
+	transition: background 0.2s;
+}
+.itemsMap:last-child {
+	border-bottom: none;
+}
+.itemsMap input[type="checkbox"] {
+	accent-color: var(--main-color, #ec5fa1);
+	width: 1.1em;
+	height: 1.1em;
+	cursor: pointer;
+}
+.itemsMap .textCheckbox {
+	flex: 1;
+	word-break: break-word;
+	color: var(--text-color, #222);
+	text-decoration: none;
+	transition: color 0.2s;
+}
+.itemsMap input[type="checkbox"]:checked + .textCheckbox {
+	color: #aaa;
+	text-decoration: line-through;
+	opacity: 0.7;
+}
+.itemsMap button {
+	background: none;
+	border: none;
+	font-size: 1.2em;
+	cursor: pointer;
+	color: #e74c3c;
+	padding: 0.2em 0.5em;
+	border-radius: 5px;
+	transition: background 0.2s;
+}
+.itemsMap button:hover {
+	background: #ffeaea;
+}
+
+form {
+	margin: 1.5rem 0 0.5rem 0;
+	display: flex;
+	gap: 0.5rem;
+}
+form input[type="text"],
+form input[type="search"],
+form input {
+	flex: 1;
+	padding: 0.7em 1em;
+	border: 1.5px solid #e0e0e0;
+	border-radius: 6px;
+	font-size: 1em;
+	background: var(--bg-color, #fff);
+	color: var(--text-color, #222);
+	transition: border 0.2s;
+}
+form input:focus {
+	outline: none;
+	border-color: var(--main-color, #ec5fa1);
+}
+form button[type="submit"] {
+	background: linear-gradient(45deg, var(--main-color, #ec5fa1), var(--accent, #f860b4));
+	color: #fff;
+	border: none;
+	border-radius: 6px;
+	padding: 0.7em 1.2em;
+	font-weight: 600;
+	font-size: 1em;
+	cursor: pointer;
+	transition: background 0.2s, transform 0.2s;
+}
+form button[type="submit"]:hover {
+	background: linear-gradient(45deg, var(--accent, #f860b4), var(--main-color, #ec5fa1));
+	transform: translateY(-2px);
+}
+
+.pendientes {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-top: 1.2rem;
+	font-size: 1em;
+}
+.pendientes span {
+	color: var(--main-color, #ec5fa1);
+	font-weight: 600;
+}
+.pendientes button {
+	background: #f5f5f5;
+	color: #e74c3c;
+	border: none;
+	border-radius: 6px;
+	padding: 0.5em 1em;
+	font-size: 1em;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+.pendientes button:hover {
+	background: #ffeaea;
+}
+
+@media (max-width: 600px) {
+	.listaTarea {
+		max-width: 100%;
+	}
+	form {
+		flex-direction: column;
+		gap: 0.7rem;
+	}
+}
