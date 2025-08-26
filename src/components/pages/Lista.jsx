@@ -27,7 +27,7 @@ export default function ListaDeGustos({titulo,descripcion}){
         }
     };
 
-    // Animación de imagen volando al carrito
+    // imagen volando al carrito
     const flyToCart = (id) => {
         const img = imgRefs.current[id];
         const cart = cartIconRef.current;

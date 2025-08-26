@@ -1,5 +1,4 @@
 
-/* Modo claro (por defecto) */
 :root {
     --main-color: #1ac5db;
     --main-color-hover: #09c29a;
@@ -23,7 +22,6 @@
     --text-secondary: #333;
 }
 
-/* Modo oscuro */
 :root[data-theme='dark'] {
     --main-color: #ff63ac;
     --main-color-hover: #09c29a;

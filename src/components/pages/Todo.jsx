@@ -5,15 +5,6 @@ import "../css/Todo.css";
 
 
 export default function Todo({ user }) {
-    // Si no hay usuario logueado, no mostrar la lista
-    //     if (!user) {
-    //     return (
-    //         <div className="todo-container">
-    //             <h2 className="todo-title">Lista de Tareas</h2>
-    //             <p style={{textAlign: 'center', margin: '2rem 0', color: '#888'}}>Inicia sesión para ver tus tareas.</p>
-    //         </div>
-    //     );
-    // }
 
         const storageKey = useMemo(
             () => `todos_${user}`,
@@ -27,11 +18,11 @@ export default function Todo({ user }) {
     const [texto, setTexto] = useState("");
 
 
-    // Si cambia el usuario (storageKey), recargar tareas
     useEffect(() => {
         const saved = localStorage.getItem(storageKey);
         setItems(saved ? JSON.parse(saved) : []);
-    }, [storageKey]);
+    }, [storageKey]); 
+    // Si cambia el usuario storageKey, recargar tareas
 
     // guardar tareas
     useEffect(() => {
@@ -45,7 +36,7 @@ export default function Todo({ user }) {
 
         setItems((prev) => [
             ...prev,
-            { id: crypto.randomUUID(), text: txt, done: false, ts: Date.now() },
+            {text: txt },
         ]);
 
         setTexto("");

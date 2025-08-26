@@ -33,7 +33,7 @@ export default function Login({ onLogin }) {
             localStorage.setItem("sesion", "activa");
             localStorage.setItem("usuario", datos.usuario); // Guarda solo el string
             setMensaje("Bienvenido " + usuario);
-            // Avisar al componente padre (App) que el login fue exitoso
+            // Avisar al componente padre app que el login fue exitoso
             onLogin?.(usuario);
         } else {
             setMensaje("Usuario o contraseña incorrectos");

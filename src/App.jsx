@@ -14,9 +14,9 @@ export default function App() {
 
   useEffect(() => {
     const ses = localStorage.getItem("sesion") === "activa";
-    const usu = localStorage.getItem("usuario"); // string
+    const usu = localStorage.getItem("usuario");
     setSesionActiva(ses);
-    setUser(usu); // user es string
+    setUser(usu);
 
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
@@ -25,9 +25,9 @@ export default function App() {
 
   const handleLoginSucess = (usuario) => {
     setSesionActiva(true);
-    setUser(usuario); // string
+    setUser(usuario);
     localStorage.setItem("sesion", "activa");
-    localStorage.setItem("usuario", usuario); // string
+    localStorage.setItem("usuario", usuario);
   };
 
   const handleLogout = () => {
